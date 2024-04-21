@@ -7,9 +7,10 @@ import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
+import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/users.js";
 import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
-import authRoutes from "./routes/auth.js";
 
 //Configuration
 const __filename = fileURLToPath(import.meta.url);
@@ -42,7 +43,8 @@ const uplaod = multer({ storage });
 app.post("/auth/register", uplaod.single("picture"), register);
 
 //Routes
-app.use("/auth",authRoutes);
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 
 //Mongoose Setup
 const PORT = process.env.PORT || 6001;
