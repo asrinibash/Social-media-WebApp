@@ -28,6 +28,7 @@ const LoginPage = () => {
           Welcome to Socipedia, the Social Media for Sociopaths!
         </Typography>
         <Form />
+        <span>Use email-asrinibashachary@gmail.com | password-12345678</span>
       </Box>
     </Box>
   );
