@@ -7,10 +7,10 @@ import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
+import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
-import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
@@ -18,13 +18,11 @@ import User from "./models/User.js";
 import Post from "./models/Post.js";
 import { users, posts } from "./data/index.js";
 
-//Configuration
+/* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
 const app = express();
-
-//middlewares
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -34,27 +32,27 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
-//File Storage - when upload the file by client it will stored on this location
+/* FILE STORAGE */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cd(null, "public/assets");
+    cb(null, "public/assets");
   },
   filename: function (req, file, cb) {
-    cd(null, file, file.originalname);
+    cb(null, file.originalname);
   },
 });
-const uplaod = multer({ storage });
+const upload = multer({ storage });
 
-//Routes with file register -> due to use of upload we can't this API to routes folder
-app.post("/auth/register", uplaod.single("picture"), register);
-app.post("/posts", verifyToken, uplaod.single("picture"), createPost);
+/* ROUTES WITH FILES */
+app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
-//Routes
+/* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
-//Mongoose Setup
+/* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
 mongoose
   .connect(process.env.MONGO_URL, {
@@ -64,8 +62,8 @@ mongoose
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
-    //Add data one time   --> just for test purpose..manually inserted data
+    /* ADD DATA ONE TIME */
     // User.insertMany(users);
-    // Post.insertMany(posts);
+    // Post.insertMany(posts);  //for testing purpose
   })
   .catch((error) => console.log(`${error} did not connect`));
