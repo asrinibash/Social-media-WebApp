@@ -2,7 +2,7 @@
 
 This is a full-featured social media web application developed using the MERN stack. The frontend is built with React and heavily utilizes MUI components, while the backend is powered by Node.js and Express. The application supports all the features you would expect from a social media platform.
 
-**[Live Demo](http://your-live-app-url.com](https://asrinibash-sociopedia.netlify.app)**
+**[Live Demo](https://asrinibash-sociopedia.netlify.app)**
 
 ## Table of Contents
 
